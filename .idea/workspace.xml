@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="07cf3602-8e5b-49b8-9a9a-b6972bcd1e3f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/production-rag.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    <list default="true" id="07cf3602-8e5b-49b8-9a9a-b6972bcd1e3f" name="Changes" comment="Based on the diffs provided, here is a concise commit message summarizing the changes:&#10;&#10;Initialize project with PyCharm configuration and boilerplate script&#10;&#10;- Add IntelliJ/PyCharm project metadata, inspection profiles, and module settings.&#10;- Configure Python 3.14 SDK and Black formatter settings.&#10;- Create initial `main.py` with a sample hello-world function and execution block.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,14 +18,85 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "SilverShadow123"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/SilverShadow123/production-rag",
+    "accountId": "bdf57a73-10a0-48df-8af8-ab4503ddafb9"
+  }
+}]]></component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6,
-  "fromUser": false
-}]]></component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.1321386598716505" />
+      <entry key="MS500" value="1.7892733962969583" />
+      <entry key="S2" value="4.321719058642588" />
+      <entry key="S5" value="8.562679211630634" />
+      <entry key="S10" value="12.521115720165062" />
+      <entry key="S30" value="17.72819194455828" />
+      <entry key="S60" value="25.17704903386921" />
+      <entry key="M2" value="45.69129175459104" />
+      <entry key="M5" value="81.6666153444843" />
+      <entry key="M10" value="102.36978419888158" />
+      <entry key="M15" value="110.70800715052515" />
+      <entry key="M30" value="119.88930250873341" />
+      <entry key="H1" value="124.8227435447862" />
+      <entry key="H2" value="127.38014719387269" />
+      <entry key="H4" value="128.68217197996123" />
+      <entry key="D1" value="129.77925635097694" />
+      <entry key="W1" value="129.96843800839773" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9897645342826061" />
+      <entry key="MS500" value="1.5592835388986888" />
+      <entry key="S2" value="4.223953756340443" />
+      <entry key="S5" value="8.511713170686257" />
+      <entry key="S10" value="12.490220444868132" />
+      <entry key="S30" value="17.71555840107357" />
+      <entry key="S60" value="25.169864572629923" />
+      <entry key="M2" value="45.68676749356748" />
+      <entry key="M5" value="81.664169777427" />
+      <entry key="M10" value="102.3683783541035" />
+      <entry key="M15" value="110.70702068817177" />
+      <entry key="M30" value="119.88878214337456" />
+      <entry key="H1" value="124.82247606566989" />
+      <entry key="H2" value="127.38001156227243" />
+      <entry key="H4" value="128.68210368240872" />
+      <entry key="D1" value="129.77924490038757" />
+      <entry key="W1" value="129.96843637093224" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3FwP954B5JC5DXZnovS1NOUOZzj" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -39,10 +107,15 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "master"
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
   <component name="SharedIndexes">
@@ -60,10 +133,23 @@
       <option name="presentableId" value="Default" />
       <updated>1782983004694</updated>
     </task>
+    <task id="LOCAL-00001" summary="Based on the diffs provided, here is a concise commit message summarizing the changes:&#10;&#10;Initialize project with PyCharm configuration and boilerplate script&#10;&#10;- Add IntelliJ/PyCharm project metadata, inspection profiles, and module settings.&#10;- Configure Python 3.14 SDK and Black formatter settings.&#10;- Create initial `main.py` with a sample hello-world function and execution block.">
+      <option name="closed" value="true" />
+      <created>1782983207285</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1782983207285</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Based on the diffs provided, here is a concise commit message summarizing the changes:&#10;&#10;Initialize project with PyCharm configuration and boilerplate script&#10;&#10;- Add IntelliJ/PyCharm project metadata, inspection profiles, and module settings.&#10;- Configure Python 3.14 SDK and Black formatter settings.&#10;- Create initial `main.py` with a sample hello-world function and execution block." />
+    <option name="LAST_COMMIT_MESSAGE" value="Based on the diffs provided, here is a concise commit message summarizing the changes:&#10;&#10;Initialize project with PyCharm configuration and boilerplate script&#10;&#10;- Add IntelliJ/PyCharm project metadata, inspection profiles, and module settings.&#10;- Configure Python 3.14 SDK and Black formatter settings.&#10;- Create initial `main.py` with a sample hello-world function and execution block." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
