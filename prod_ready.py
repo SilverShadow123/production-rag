@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+embeddings = OpenAIEmbeddings(model="openai/text-embedding-3-small", base_url="https://openrouter.ai/api/v1", api_key=os.getenv("OPENROUTER_API_KEY"))
 
 
 # Sample document with distinct topics
@@ -52,7 +52,7 @@ def smart_chunker(
     '''
     Production chunking with semantic as primary, recursive as fallback.
     '''
-    embeddings = OpenAIEmbeddings(model='text-embedding-3-small')
+    embeddings = OpenAIEmbeddings(model='openai/text-embedding-3-small', base_url="https://openrouter.ai/api/v1", api_key=os.getenv("OPENROUTER_API_KEY"))
 
     if use_semantic:
         try:
