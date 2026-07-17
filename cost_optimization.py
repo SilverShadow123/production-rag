@@ -24,7 +24,7 @@ class ModelRouter:
     """Route queries to appropriate model based on complexity."""
 
     def __init__(self):
-        self.cheap_model = "google/gemini-2.0-flash-lite-001"
+        self.cheap_model = "openai/gpt-4o"
         self.expensive_model = "anthropic/claude-sonnet-4-20250514"
         self.classifier_model = "google/gemini-2.0-flash-lite-001"
 
@@ -141,7 +141,7 @@ class CachedLLM:
     """LLM wrapper with caching."""
 
     def __init__(self):
-        self.model = "google/gemini-2.0-flash-lite-001"
+        self.model = "openai/gpt-4o"
         self.cache = SemanticCache()
         self.cache_hits = 0
         self.cache_misses = 0
@@ -300,8 +300,8 @@ def demo_token_budgeting():
 
 if __name__ == "__main__":
     # demo_model_routing()
-    # demo_caching()
-    demo_token_budgeting()
+    demo_caching()
+    # demo_token_budgeting()
 
     # Production version would:
 # 1. Embed the query into a vector
