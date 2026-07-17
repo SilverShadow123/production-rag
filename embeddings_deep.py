@@ -1,11 +1,15 @@
 import os
+import tempfile
+import hashlib
 import numpy as np
 from langchain_openai import OpenAIEmbeddings
 from dotenv import load_dotenv
+from langchain_classic.embeddings import CacheBackedEmbeddings
+from langchain_classic.storage import LocalFileStore
 
 load_dotenv()
 
-embeddings = OpenAIEmbeddings(
+embedding_model = OpenAIEmbeddings(
     model="openai/text-embedding-3-small",
     openai_api_key=os.getenv("OPENROUTER_API_KEY"),
     openai_api_base="https://openrouter.ai/api/v1",
@@ -14,10 +18,12 @@ embeddings = OpenAIEmbeddings(
 
 def basic_embedding():
     text = 'What is machine learning?'
-    single_embedding = embeddings.embed_query(text)
+    single_embedding = embedding_model.embed_query(text)
     print(f"Vector dimensions: {len(single_embedding)}")
     print(f"First 5 values: {single_embedding[:5]}")
     print(f"Vector norm: {np.linalg.norm(single_embedding):.4f}")
+
+
 def batch_embeddings():
     text = [
         "What is Machine Learning?",
@@ -25,11 +31,13 @@ def batch_embeddings():
         "How does a neural network work?",
     ]
 
-    batch_embedding = embeddings.embed_documents(text)
+    batch_embedding = embedding_model.embed_documents(text)
     for i, emb in enumerate(batch_embedding):
-        print(f"Text {i+1} - Vector dimensions: {len(emb)}")
-        print(f"Text {i+1} - First 5 values: {emb[:5]}")
-        print(f"Text {i+1} - Vector norm: {np.linalg.norm(emb):.4f}")
+        print(f"Text {i + 1} - Vector dimensions: {len(emb)}")
+        print(f"Text {i + 1} - First 5 values: {emb[:5]}")
+        print(f"Text {i + 1} - Vector norm: {np.linalg.norm(emb):.4f}")
+
+
 def similarity_search():
     # Documents
 
@@ -44,8 +52,8 @@ def similarity_search():
     query = "What programming languages exist?"
 
     # embed documents and query
-    doc_vector = embeddings.embed_documents(docs)
-    query_vector = embeddings.embed_query(query)
+    doc_vector = embedding_model.embed_documents(docs)
+    query_vector = embedding_model.embed_query(query)
 
     # compute cosine similarities
     def cosine_similarity(vec1, vec2):
@@ -62,7 +70,31 @@ def similarity_search():
         print(f"  {score:.4f}: {doc}")
 
 
+def embedding_caching():
+    with tempfile.TemporaryDirectory() as temp_dir:
+        storage = LocalFileStore(temp_dir)
+        cached_embeddings = CacheBackedEmbeddings.from_bytes_store(underlying_embeddings=embedding_model,
+                                                                    document_embedding_cache=storage,
+                                                                    namespace='exercise',
+                                                                    key_encoder=hashlib.sha256)
+        text = "What is Reinforcement Learning?"
+
+        # First call - hits API
+        print("First call (API):")
+        vectors1 = cached_embeddings.embed_documents([text])
+        print(f"  Embedded {len(vectors1)} documents")
+
+        # Second call - from cache
+        print("\nSecond call (Cache):")
+        vectors2 = cached_embeddings.embed_documents([text])
+        print(f"  Embedded {len(vectors2)} documents")
+
+        # Verify same results
+        print(f"\nSame vectors: {np.allclose(vectors1[0], vectors2[0])}")
+
+
 if __name__ == "__main__":
     # basic_embedding()
     # batch_embeddings()
-    similarity_search()
+    # similarity_search()
+    embedding_caching()
