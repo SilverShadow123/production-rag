@@ -23,7 +23,7 @@ class InputSanitizer:
         """Check if input contains suspicious patterns."""
         for pattern in self.patterns:
             if pattern.search(text):
-                return True, f"Blocked: potential prompt injection detected: {pattern.pattern}"
+                return False, f"Blocked: potential prompt injection detected: {pattern.pattern}"
         return True, None
 
     def clean(self, text: str) -> str:
