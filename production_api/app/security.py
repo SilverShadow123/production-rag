@@ -1,8 +1,6 @@
 import re
 from typing import Optional
-
 from langsmith import traceable
-from pydantic import BaseModel, Field
 
 class InputSanitizer:
     """Sanitize user input before processing."""
@@ -43,18 +41,24 @@ class PIIDetector:
     """Detect and mask personally identifiable information."""
 
     PATTERNS = {
-        "email": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b",
-        "phone": r"\b\d{3}[-.]?\d{3}[-.]?\d{4}\b",
-        "ssn": r"\b\d{3}-\d{2}-\d{4}\b",
-        "credit_card": r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b",
-        "ip_address": r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b",
+        "email": re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"),
+        "phone":re.compile(r"\b\d{3}[-.]?\d{3}[-.]?\d{4}\b"),
+        "ssn": re.compile(r"\b\d{3}-\d{2}-\d{4}\b"),
+        "credit_card": re.compile(r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b"),
+    }
+
+    MASK_MAP ={
+        'email': '[EMAIL REDACTED]',
+        'phone': '[PHONE REDACTED]',
+        'ssn': '[SSN REDACTED]',
+        'credit_card': '[CARD REDACTED]',
     }
 
     def detect(self, text: str) -> dict[str, list[str]]:
         """Detect PII in text."""
         found = {}
         for pii_type, pattern in self.PATTERNS.items():
-            matches = re.findall(pattern, text)
+            matches = pattern.findall(text)
             if matches:
                 found[pii_type] = matches
         return found
@@ -63,51 +67,42 @@ class PIIDetector:
         """Mask PII in text."""
         masked = text
         for pii_type, pattern in self.PATTERNS.items():
-            if pii_type == "email":
-                masked = re.sub(pattern, "[EMAIL REDACTED]", masked)
-            elif pii_type == "phone":
-                masked = re.sub(pattern, "[PHONE REDACTED]", masked)
-            elif pii_type == "ssn":
-                masked = re.sub(pattern, "[SSN REDACTED]", masked)
-            elif pii_type == "credit_card":
-                masked = re.sub(pattern, "[CARD REDACTED]", masked)
-            elif pii_type == "ip_address":
-                masked = re.sub(pattern, "[IP REDACTED]", masked)
+            masked = pattern.sub(self.MASK_MAP[pii_type], masked)
         return masked
 
 class OutputValidator:
     """Validate LLM outputs before returning to user."""
 
+    HARMFUL_PATTERNS = [
+        re.compile(r"here('s| is) (how|the way) to (hack|steal|attack)", re.I),
+        re.compile(r"password\s+is\s+", re.I),
+        re.compile(r"api[_\s]?key\s*[:=]", re.I)
+    ]
+
     def __init__(self):
         self.pii_detector = PIIDetector()
 
-    def validate(self, output: str) -> tuple[bool, str, Optional[str]]:
+    def validate(self, output: str) -> tuple[str, list[str]]:
         """
         Validate output.
         Returns: (is_valid, cleaned_output, reason_if_invalid)
         """
+        warnings = []
+
         # Check for PII leakage
         pii_found = self.pii_detector.detect(output)
         if pii_found:
-            cleaned = self.pii_detector.mask(output)
-            return False, cleaned, f"PII detected and masked: {list(pii_found.keys())}"
+            output = self.pii_detector.mask(output)
+            warnings.append(f'PII detected and masked: {list(pii_found.keys())}')
 
-        # Check for harmful content patterns
-        harmful_patterns = [
-            r"here('s| is) (how|the way) to (hack|steal|attack)",
-            r"password is",
-            r"api[_\s]?key",
-        ]
 
-        for pattern in harmful_patterns:
-            if re.search(pattern, output, re.IGNORECASE):
-                return (
-                    False,
-                    "[CONTENT BLOCKED]",
-                    "Potentially harmful content detected",
-                )
 
-        return True, output, None
+        for pattern in self.HARMFUL_PATTERNS:
+            if pattern.search(output):
+                output = '[Response blocked: potentially harmful content'
+                warnings.append('Harmful content detected')
+                break
+        return output, warnings
 
 
 class SecurePipeline:
@@ -116,53 +111,34 @@ class SecurePipeline:
     def __init__(self):
         self.sanitizer = InputSanitizer()
         self.pii_detector = PIIDetector()
-        self.validator = OutputValidator()
+        self.output_validator = OutputValidator()
 
-    @traceable(name="secure_process")
-    def process(self, user_input: str) -> dict:
+    @traceable(name="security_check_input")
+    def check_input(self, text: str) -> tuple[bool, str, list[str]]:
         """Process input through security pipeline."""
 
-        result = {
-            "input": user_input,
-            "blocked": False,
-            "output": None,
-            "security_notes": [],
-        }
+        notes=[]
 
         # Step 1: Input sanitization
-        is_suspicious, reason = self.sanitizer.is_suspicious(user_input)
-        if is_suspicious:
-            result["blocked"] = True
-            result["security_notes"].append(f"Input blocked: {reason}")
-            return result
+        is_safe, reason = self.sanitizer.check(text)
+        if not is_safe:
+            return False, "", [reason]
 
-        sanitized = self.sanitizer.sanitize(user_input)
+        cleaned = self.sanitizer.clean(text)
 
         # Step 2: PII masking in input
-        input_pii = self.pii_detector.detect(sanitized)
-        if input_pii:
-            sanitized = self.pii_detector.mask(sanitized)
-            result["security_notes"].append(
-                f"Input PII masked: {list(input_pii.keys())}"
-            )
+        pii_found = self.pii_detector.detect(cleaned)
+        if pii_found:
+            cleaned = self.pii_detector.mask(cleaned)
+            notes.append(f'Input PII masked: {list(pii_found.keys())}')
 
-        # Step 3: LLM Guard check
-        guard_result = self.guard.check(sanitized)
-        if not guard_result.get("safe"):
-            result["blocked"] = True
-            result["security_notes"].append(
-                f"Guard blocked: {guard_result.get('reason')}"
-            )
-            return result
+        return True, cleaned, notes
 
-        # Step 4: Process with LLM
-        response = self.llm.invoke(sanitized)
-        output = response.content
+    @traceable(name="security_check_output")
+    def check_output(self, text: str) -> tuple[bool, str, list[str]]:
+        """Validate output before returning to client.
+        Returns: (cleaned_output, notes)
+        """
+        return self.output_validator.validate(text)
 
-        # Step 5: Output validation
-        is_valid, cleaned_output, val_reason = self.validator.validate(output)
-        if not is_valid:
-            result["security_notes"].append(f"Output cleaned: {val_reason}")
 
-        result["output"] = cleaned_output
-        return result
