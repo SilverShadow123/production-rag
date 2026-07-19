@@ -2,9 +2,9 @@ from pydantic_settings import BaseSettings
 from functools import lru_cache
 class Settings(BaseSettings):
 
-    # LLM Configurations
-    openai_api_key: str
-    openai_api_base: str = "https://api.openai.com/v1"
+    # OpenRouter LLM Configurations
+    openrouter_api_key: str
+    openrouter_api_base: str = "https://openrouter.ai/api/v1"
     primary_model: str = "openai/gpt-4o-mini"
     fallback_model: str = "openai/gpt-4o-mini"
 
