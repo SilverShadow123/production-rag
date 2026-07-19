@@ -105,7 +105,7 @@ class OutputValidator:
         return output, warnings
 
 
-class SecurePipeline:
+class SecurityPipeline:
     """Complete secure processing pipeline."""
 
     def __init__(self):
